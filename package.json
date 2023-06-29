@@ -1,0 +1,29 @@
+{
+  "name": "mongodb-safe-query",
+  "version": "0.0.1",
+  "description": "this package will help to make mongodb query safer",
+  "main": "src",
+  "scripts": {
+    "test": "jest",
+    "start": "node -r ts-node/register -r module-alias/register src",
+    "dev": "node -r dotenv/config -r ts-node/register -r module-alias/register src | pino-pretty",
+    "dev:watch": "node --watch -r dotenv/config -r ts-node/register -r module-alias/register src | pino-pretty"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielsoheil/mongodb-safe-query.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielsoheil/mongodb-safe-query/issues"
+  },
+  "homepage": "https://github.com/danielsoheil/mongodb-safe-query#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "jest": "^29.5.0",
+    "module-alias": "^2.2.3",
+    "pino-pretty": "^10.0.0",
+    "ts-node": "^10.9.1"
+  }
+}
