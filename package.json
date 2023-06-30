@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/danielsoheil/mongodb-safe-query#readme",
   "dependencies": {
+    "@sinclair/typebox": "^0.28.20",
     "dotenv": "^16.3.1",
     "jest": "^29.5.0",
     "module-alias": "^2.2.3",
