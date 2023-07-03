@@ -10,7 +10,7 @@ const fields = (ables: string[]) => {
     ablesSchema.push(
       Type.Object({
         [able]: Type.Union([
-          Type.Object({ $exact: Type.String() }),
+          Type.Object({ $eq: Type.String() }),
           Type.Object({ $like: Type.String() }),
         ]),
       })
