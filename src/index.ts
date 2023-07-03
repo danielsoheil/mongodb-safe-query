@@ -22,19 +22,23 @@ type filterStructure =
     };
 
 const fields = (ables: string[]) => {
-  return ables.map((able) => {
-    return Type.Object({
-      [able]: Type.Union([
-        Type.Object({ $exact: Type.String() }),
-        Type.Object({ $like: Type.String() }),
-      ]),
-    });
+  const ablesSchema: TObject[] = [];
+  ables.map((able) => {
+    ablesSchema.push(
+      Type.Object({
+        [able]: Type.Union([
+          Type.Object({ $exact: Type.String() }),
+          Type.Object({ $like: Type.String() }),
+        ]),
+      })
+    );
   });
+  return ablesSchema;
 };
 
 const filterStructureSchema = (
   ables: string[],
-  maxComplexity = 5,
+  maxComplexity = 3,
   currentComplexity = 0
 ): TSchema | void => {
   if (currentComplexity < maxComplexity) {
@@ -51,15 +55,16 @@ const filterStructureSchema = (
           ...fields(ables),
           Type.Object({ $and: Type.Array(nextLevel) }),
           Type.Object({ $or: Type.Array(nextLevel) }),
+          Type.Object({}),
         ])
-      : Type.Union(fields(ables));
+      : Type.Union([...fields(ables), Type.Object({})]);
   }
 };
 
-const filterSchema = (ables: string[]) => {
+export const filterSchema = (ables: string[]) => {
   const schema = filterStructureSchema(ables);
-  if (!schema) throw new Error('this is not possible');
-  return Type.Partial(schema);
+  if (!schema) throw new Error("this is not possible");
+  return Type.Optional(schema);
 };
 
 const status = Value.Check(filterSchema(filterAbles), {$or: 7});
