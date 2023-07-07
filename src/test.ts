@@ -1,11 +1,12 @@
-import { afterEach, beforeEach, expect, it } from "@jest/globals";
+import { expect, it } from "@jest/globals";
 
 import Ajv from "ajv";
 import { filterSchema } from "./index";
+import { TSchema } from "@sinclair/typebox";
 
 const ajv = new Ajv({ removeAdditional: "all" });
 
-const validateWithoutRemoveField = (schema, data) => {
+const validateWithoutRemoveField = (schema: TSchema, data: {}) => {
   const dataBackup = structuredClone(data);
   expect(ajv.validate(schema, data)).toBe(true);
   expect(data).toMatchObject(dataBackup);

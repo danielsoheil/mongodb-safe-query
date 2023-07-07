@@ -1,16 +1,16 @@
-import { TObject, TSchema, Type } from "@sinclair/typebox";
+import { TObject, TProperties, TSchema, Type } from "@sinclair/typebox";
 
-const fieldValue = Type.Union([
+const fieldPossibleValues = [
   Type.String(),
   Type.Object({ $eq: Type.String() }),
   Type.Object({ $like: Type.String() }),
-]);
+];
 
 const fields = (fieldKeys: string[]) => {
-  const objectFields = {};
-  fieldKeys.map((fieldKey) => {
-    objectFields[fieldKey] = fieldValue;
-  });
+  const objectFields: TProperties = {};
+  for (const fieldKey of fieldKeys) {
+    objectFields[fieldKey] = Type.Union(fieldPossibleValues);
+  }
   return Type.Partial(Type.Object(objectFields));
 };
 
@@ -18,7 +18,7 @@ const filterStructureSchema = (
   ables: string[],
   maxComplexity = 3,
   currentComplexity = 0
-): TSchema => {
+): TSchema | void => {
   if (currentComplexity < maxComplexity + 1) {
     currentComplexity++;
 
@@ -40,5 +40,5 @@ const filterStructureSchema = (
 
 export const filterSchema = (ables: string[]) => {
   const schema = filterStructureSchema(ables, 3);
-  return Type.Optional(schema);
+  return Type.Optional(schema ?? Type.Object({}));
 };
