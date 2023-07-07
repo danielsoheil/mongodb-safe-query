@@ -1,51 +1,44 @@
-import {
-  TObject,
-  TSchema,
-  Type,
-} from "@sinclair/typebox";
+import { TObject, TSchema, Type } from "@sinclair/typebox";
 
-const fields = (ables: string[]) => {
-  const ablesSchema: TObject[] = [];
-  ables.map((able) => {
-    ablesSchema.push(
-      Type.Object({
-        [able]: Type.Union([
-          Type.Object({ $eq: Type.String() }),
-          Type.Object({ $like: Type.String() }),
-        ]),
-      })
-    );
+const fieldValue = Type.Union([
+  Type.String(),
+  Type.Object({ $eq: Type.String() }),
+  Type.Object({ $like: Type.String() }),
+]);
+
+const fields = (fieldKeys: string[]) => {
+  const objectFields = {};
+  fieldKeys.map((fieldKey) => {
+    objectFields[fieldKey] = fieldValue;
   });
-  return ablesSchema;
+  return Type.Partial(Type.Object(objectFields));
 };
 
 const filterStructureSchema = (
   ables: string[],
   maxComplexity = 3,
   currentComplexity = 0
-): TSchema | void => {
-  if (currentComplexity < maxComplexity) {
+): TSchema => {
+  if (currentComplexity < maxComplexity + 1) {
     currentComplexity++;
+
+    const possibleObjects: TObject[] = [fields(ables)];
 
     const nextLevel = filterStructureSchema(
       ables,
       maxComplexity,
       currentComplexity
     );
+    if (nextLevel) {
+      possibleObjects.push(Type.Object({ $and: Type.Array(nextLevel) }));
+      possibleObjects.push(Type.Object({ $or: Type.Array(nextLevel) }));
+    }
 
-    return nextLevel
-      ? Type.Union([
-          ...fields(ables),
-          Type.Object({ $and: Type.Array(nextLevel) }),
-          Type.Object({ $or: Type.Array(nextLevel) }),
-          Type.Object({}),
-        ])
-      : Type.Union([...fields(ables), Type.Object({})]);
+    return Type.Union(possibleObjects.reverse());
   }
 };
 
 export const filterSchema = (ables: string[]) => {
-  const schema = filterStructureSchema(ables);
-  if (!schema) throw new Error("this is not possible");
+  const schema = filterStructureSchema(ables, 3);
   return Type.Optional(schema);
 };
