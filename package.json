@@ -2,8 +2,9 @@
   "name": "mongodb-safe-query",
   "version": "0.0.1",
   "description": "this package will help to make mongodb query safer",
-  "main": "src",
+  "main": "lib",
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
     "test": "jest",
     "start": "node -r ts-node/register -r module-alias/register src",
     "dev": "node -r dotenv/config -r ts-node/register -r module-alias/register src | pino-pretty",
