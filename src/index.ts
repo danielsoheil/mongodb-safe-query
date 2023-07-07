@@ -18,7 +18,7 @@ const filterStructureSchema = (
   ables: string[],
   maxComplexity = 3,
   currentComplexity = 0
-): TSchema | void => {
+) => {
   if (currentComplexity < maxComplexity + 1) {
     currentComplexity++;
 
