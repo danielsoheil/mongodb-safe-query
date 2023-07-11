@@ -1,8 +1,8 @@
 {
   "name": "mongodb-safe-query",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "this package will help to make mongodb query safer",
-  "main": "lib",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "test": "jest",
