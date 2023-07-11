@@ -1,6 +1,6 @@
 {
   "name": "mongodb-safe-query",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "this package will help to make mongodb query safer",
   "main": "lib/index.js",
   "scripts": {
