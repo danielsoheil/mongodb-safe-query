@@ -1,13 +1,16 @@
-import {TObject, Type, TArray, TProperties, Static} from "@sinclair/typebox";
+import { TObject, Type, TArray, TProperties, Static } from "@sinclair/typebox";
 
-const fieldPossibleValues = () => Type.Union([
-  Type.String(),
-  Type.Object({ $eq: Type.String() }),
-  Type.Object({ $like: Type.String() }),
-]);
+const fieldPossibleValues = () =>
+  Type.Union([
+    Type.String(),
+    Type.Object({ $eq: Type.String() }),
+    Type.Object({ $like: Type.String() }),
+  ]);
 
 const fields = (fieldKeys: string[]) => {
-  const objectFields: {[key: string]: ReturnType<typeof fieldPossibleValues>} = {};
+  const objectFields: {
+    [key: string]: ReturnType<typeof fieldPossibleValues>;
+  } = {};
   for (const fieldKey of fieldKeys) {
     objectFields[fieldKey] = fieldPossibleValues();
   }
@@ -22,7 +25,11 @@ const filterStructureSchema = (
   if (currentComplexity < maxComplexity + 1) {
     currentComplexity++;
 
-    const possibleObjects: (ReturnType<typeof fields> | TObject<{$or: TArray}> | TObject<{$and: TArray}>)[] = [fields(ables)];
+    const possibleObjects: (
+      | ReturnType<typeof fields>
+      | TObject<{ $or: TArray }>
+      | TObject<{ $and: TArray }>
+    )[] = [fields(ables)];
 
     const nextLevel = filterStructureSchema(
       ables,
