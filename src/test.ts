@@ -2,7 +2,7 @@ import { expect, it } from "@jest/globals";
 
 import Ajv from "ajv";
 import { filterSchema } from "./index";
-import { TSchema } from "@sinclair/typebox";
+import { TSchema, Type } from "@sinclair/typebox";
 
 const ajv = new Ajv({ removeAdditional: "all" });
 
@@ -69,4 +69,19 @@ it("should validate $or operator of where mongo query with our schema", function
   validateWithoutRemoveField(filterSchema(["firstName", "lastName"]), {
     $or: [{ firstName: "daniel" }, { lastName: "soheil" }],
   });
+});
+
+it("should validate $or operator with our schema inside another schema", function () {
+  validateWithoutRemoveField(
+    Type.Object({
+      mongo: Type.Object({ where: filterSchema(["firstName", "lastName"]) }),
+    }),
+    {
+      mongo: {
+        where: {
+          $or: [{ firstName: "daniel" }, { lastName: "soheil" }],
+        },
+      },
+    }
+  );
 });
