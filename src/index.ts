@@ -14,7 +14,7 @@ const fields = (fieldKeys: string[]) => {
   for (const fieldKey of fieldKeys) {
     objectFields[fieldKey] = fieldPossibleValues();
   }
-  return Type.Partial(Type.Object(objectFields));
+  return Type.Partial(Type.Object(objectFields, { minProperties: 1 }));
 };
 
 const filterStructureSchema = (
